@@ -105,10 +105,10 @@ def renderTemplate(yamlVars, jinjaTemplate):
     if len(results_callback.host_failed) > 0:
         print("ERROR")
         output = results_callback.host_failed["localhost"]._result["msg"]
-        return (output, True)
+        return {"result": output, "error": True}
     else:
         if len(results_callback.host_ok) > 0:
             output = results_callback.host_ok["localhost"]._result["ansible_facts"][
                 "output"
             ]
-            return (output, False)
+            return {"result": output, "error": False}

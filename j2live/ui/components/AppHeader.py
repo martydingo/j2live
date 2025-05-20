@@ -2,7 +2,10 @@ from nicegui import ui
 
 import os
 
-class AppHeader():
+
+class AppHeader:
     def __init__(self):
-        ui.image(f"{os.getcwd()}/j2live/ui/static/logo.png").tailwind("h-24 w-56")
-            
+        AppHeaderContainer = ui.row()
+        AppHeaderContainer.tailwind("w-fit h-fit")
+        with AppHeaderContainer:
+            ui.image(f"/static/logo_nord.png").tailwind("h-16 w-64")
