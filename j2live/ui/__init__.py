@@ -75,7 +75,7 @@ class UI:
             <link rel="manifest" href="/static/site.webmanifest" />
         """
         )
-        ui.add_body_html('<script src="https://unpkg.com/flourite@1.3.0"></script>')
+        # ui.add_body_html('<script src="https://unpkg.com/flourite@1.3.0"></script>')
 
         ui.dark_mode(True)
 
