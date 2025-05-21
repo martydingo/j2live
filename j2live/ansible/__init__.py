@@ -103,7 +103,6 @@ def renderTemplate(yamlVars, jinjaTemplate):
     tqm.run(play)
     os.remove("template.j2")
     if len(results_callback.host_failed) > 0:
-        print("ERROR")
         output = results_callback.host_failed["localhost"]._result["msg"]
         return {"result": output, "error": True}
     else:

@@ -33,22 +33,43 @@ class CodeEditor:
         if tailwind != None:
             codeEditor.tailwind(tailwind + " font-mono")
 
-    def handleChange(event):
-        editorName = event.name
+    def setOutput(self, value: str):
+        app.storage.browser["Output"]["value"] = value
+
+    def testYamlParsing(self, yamlVars):
+        try:
+            yaml.full_load(yamlVars)
+            return True
+        except Exception as errorMsg:
+            return str(errorMsg)
+
+
+    def handleChange(self):
+        editorName = self.name
 
         match editorName:
             case "YAMLEditor":
                 jinjaTemplate = app.storage.browser["Jinja2"]["value"]
-                yamlVars = app.storage.browser["YAML"]["value"]    
-                renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
-                app.storage.browser["Output"]["value"] = renderResult["result"] if renderResult["error"] == False else ui.notify(message=renderResult['result'], type="negative")
-                
-                
+                yamlVars = app.storage.browser["YAML"]["value"]   
+                yamlParseResult = self.testYamlParsing(yamlVars)
+                if yamlParseResult == True:
+                    renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
+                    self.setOutput(renderResult["result"])
+                else:
+                    self.setOutput(yamlParseResult)
+
+
             case "Jinja2Editor":
                 jinjaTemplate = app.storage.browser["Jinja2"]["value"]
-                yamlVars = app.storage.browser["YAML"]["value"]
-                renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
-                app.storage.browser["Output"]["value"] = renderResult["result"] if renderResult["error"] == False else ui.notify(message=renderResult['result'], type="negative")
+                yamlVars = app.storage.browser["YAML"]["value"]   
+                yamlParseResult = self.testYamlParsing(yamlVars)
+                if yamlParseResult == True:
+                    renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
+                    self.setOutput(renderResult["result"])
+                else:
+                    self.setOutput(yamlParseResult)
+
+
                 
                 
                 
