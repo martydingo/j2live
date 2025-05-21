@@ -8,7 +8,7 @@ from nicegui import ui, app
 import os
 
 
-@ui.page(path="/", title="J2Live", favicon="favicon.ico")
+@ui.page(path="/", title="J2Live", favicon="/static/favicon.ico")
 class UI:
     def __init__(self):
         self.setRootPageStyles()
@@ -69,6 +69,15 @@ class UI:
 
     def setRootPageStyles(self):
         app.add_static_files("/static", f"{os.getcwd()}/j2live/ui/static")
+
+        ui.add_head_html("""
+            <link rel="icon" type="image/png" href="/static/favicon-96x96.png" sizes="96x96" />
+            <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+            <link rel="shortcut icon" href="/static/favicon.ico" />
+            <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png" />
+            <meta name="apple-mobile-web-app-title" content="J2Live" />
+            <link rel="manifest" href="/static/site.webmanifest" />
+        """)
 
         ui.dark_mode(True)
 
