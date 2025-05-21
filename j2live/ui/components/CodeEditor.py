@@ -1,24 +1,32 @@
 from nicegui import ui, app
+from ...ansible import renderTemplate
+
+import yaml
 
 
 class CodeEditor:
     def __init__(self, name: str, language: str, tailwind=None):
         self.name = name
-        print(app.storage.browser)
+
         editorContainer = ui.element("div")
         editorContainer.tailwind("w-full h-full flex flex-col")
         shortName = name.replace("Editor", "")
-        print(shortName)
+
         with editorContainer:
             ui.label(shortName).classes("muted").tailwind(
-                "indent-4 font-bold text-xs tracking-wider font-display mb-2"
+                "indent-4 font-bold text-xs tracking-wider font-display"
             )
             codeEditor = ui.codemirror(
                 language=language,
                 theme="nord",
+                line_wrapping=True if shortName == "Output" else False,
                 on_change=self.handleChange,
             ).classes(name)
-            # codeEditor.bind_value(app.storage.browser[shortName])
+
+            if shortName == "Output":
+                codeEditor.bind_value_from(app.storage.browser[shortName])
+            else:
+                codeEditor.bind_value(app.storage.browser[shortName])
 
         self.editor = codeEditor
 
@@ -27,11 +35,20 @@ class CodeEditor:
 
     def handleChange(event):
         editorName = event.name
-        editor = event.editor
 
         match editorName:
             case "YAMLEditor":
-                jinjaEditor = ui.query(".Jinja2Editor").element.tailwind("h-2")
-                print(jinjaEditor.element.__dict__)
+                jinjaTemplate = app.storage.browser["Jinja2"]["value"]
+                yamlVars = app.storage.browser["YAML"]["value"]    
+                renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
+                app.storage.browser["Output"]["value"] = renderResult["result"] if renderResult["error"] == False else ui.notify(message=renderResult['result'], type="negative")
+                
+                
             case "Jinja2Editor":
-                print("Jinja2")
+                jinjaTemplate = app.storage.browser["Jinja2"]["value"]
+                yamlVars = app.storage.browser["YAML"]["value"]
+                renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
+                app.storage.browser["Output"]["value"] = renderResult["result"] if renderResult["error"] == False else ui.notify(message=renderResult['result'], type="negative")
+                
+                
+                

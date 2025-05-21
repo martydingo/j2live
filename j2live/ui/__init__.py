@@ -15,51 +15,44 @@ class UI:
         self.setStorage()
 
         AppHeader()
+        
         editorContainer = ui.element("div")
-
-        editorContainer.tailwind("flex w-full h-full justify-evenly items-center")
-        # ui.space().tailwind("basis-1/3")
+        editorContainer.tailwind("flex w-full h-full justify-evenly items-start")
 
         with editorContainer:
             inputContainer = ui.element("div")
             inputContainer.tailwind(
-                "flex flex-col justify-center items-center basis-1/3"
+                "flex flex-col justify-center items-center basis-5/12"
             )
 
             outputContainer = ui.element("div")
             outputContainer.tailwind(
-                "flex flex-col justify-center items-center basis-1/3"
+                "flex flex-col justify-center items-center basis-5/12"
             )
 
             with inputContainer:
-                jinja2Editor = CodeEditor(
-                    name="Jinja2Editor", language="jinja2", tailwind="min-h-[30rem]"
+                CodeEditor(
+                    name="YAMLEditor", language="yaml", tailwind="min-h-[32rem]"
                 )
                 ui.space().tailwind("h-12")
-                yamlEditor = CodeEditor(
-                    name="YAMLEditor", language="yaml", tailwind="min-h-[30rem]"
+                CodeEditor(
+                    name="Jinja2Editor", language="jinja2", tailwind="min-h-[32rem]"
                 )
             with outputContainer:
-                outputEditor = CodeEditor(
-                    name="OutputEditor", language="", tailwind="min-h-[64rem]"
+                CodeEditor(
+                    name="OutputEditor", language="", tailwind="min-h-[68rem]"
                 )
 
     def setStorage(self):
         try:
             app.storage.browser["YAML"]
-            app.storage.browser["YAML"] = {"value": {"x: 1"}}
-        # except RuntimeError:
-        #     pass
-        except KeyError:
-            app.storage.browser["YAML"] = {"value": {"x: 1"}}
+        except KeyError as errorMsg:
+            app.storage.browser["YAML"] = {"value": "x: 1"}
 
         try:
             app.storage.browser["Jinja2"]
-            app.storage.browser["Jinja2"] = {"value": {"{{ x }}"}}
-        # except RuntimeError:
-        #     pass
         except KeyError:
-            app.storage.browser["Jinja2"] = {"value": {"{{ x }}"}}
+            app.storage.browser["Jinja2"] = {"value": "{{ x }}"}
 
         try:
             app.storage.browser["Output"]
@@ -68,10 +61,11 @@ class UI:
         except KeyError:
             app.storage.browser["Output"] = {
                 "value": renderTemplate(
-                    yamlVars=app.storage.browser["YAML"],
-                    jinjaTemplate=app.storage.browser["Jinja2"],
+                    yamlVars=app.storage.browser["YAML"]["value"],
+                    jinjaTemplate=app.storage.browser["Jinja2"]["value"],
                 )["result"]
             }
+            
 
     def setRootPageStyles(self):
         app.add_static_files("/static", f"{os.getcwd()}/j2live/ui/static")
