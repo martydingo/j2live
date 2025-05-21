@@ -8,10 +8,10 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.13,<4.0"
 dependencies = [
-    "ansible[core] (>=11.5.0,<12.0.0)",
     "pyyaml (>=6.0.2,<7.0.0)",
     "nicegui (>=2.17.0,<3.0.0)",
-    "dnspython (>=2.7.0,<3.0.0)"
+    "dnspython (>=2.7.0,<3.0.0)",
+    "ansible-core (>=2.18.6,<3.0.0)"
 ]
 
 
