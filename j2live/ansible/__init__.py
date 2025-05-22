@@ -11,7 +11,7 @@ from ansible.plugins.loader import init_plugin_loader
 import yaml, os
 
 
-def renderTemplate(yamlVars, jinjaTemplate):
+def renderTemplate(yamlVars, jinjaTemplate: str):
     # Create a callback plugin so we can capture the output
     class ResultsCollectorJSONCallback(CallbackBase):
         def __init__(self, *args, **kwargs):
@@ -31,6 +31,9 @@ def renderTemplate(yamlVars, jinjaTemplate):
         def v2_runner_on_failed(self, result, *args, **kwargs):
             host = result._host
             self.host_failed[host.get_name()] = result
+
+    def cleanTemplate(jinjaTemplate: str):
+        return jinjaTemplate.replace("lookup('pipe', 'kill 0')", "lookup('pipe', 'kill ')").replace('lookup("pipe", "kill 0")', 'lookup("pipe", "kill ")')
 
     init_plugin_loader()
     loader = DataLoader()
@@ -71,8 +74,9 @@ def renderTemplate(yamlVars, jinjaTemplate):
         loader=loader, inventory=inventory, version_info=CLI.version_info(gitinfo=False)
     )
 
+    cleanJinjaTemplate = cleanTemplate(jinjaTemplate)
     with open("template.j2", "w") as file:
-        file.write(rf"{jinjaTemplate}")
+        file.write(rf"{cleanJinjaTemplate}")
         file.close()
 
     play_source = dict(
