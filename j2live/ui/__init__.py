@@ -61,8 +61,8 @@ class UI:
         except KeyError:
             app.storage.browser["Output"] = {
                 "value": renderTemplate(
-                    yamlVars=app.storage.browser["YAML"]["value"],
-                    jinjaTemplate=app.storage.browser["Jinja2"]["value"],
+                    yamlVars=str(app.storage.browser["YAML"]["value"]),
+                    jinjaTemplate=(app.storage.browser["Jinja2"]["value"]),
                 )["result"]
             }
             
