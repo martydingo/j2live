@@ -5,6 +5,7 @@ import yaml
 
 
 class CodeEditor:
+    # escapeStr = lambda self, string: string.replace("${", '${"${"}').replace("`", '${"`"}')
     def __init__(self, name: str, language: str, tailwind=None):
         self.name = name
 
@@ -44,7 +45,7 @@ class CodeEditor:
             return str(errorMsg)
 
 
-    def handleChange(self):
+    async def handleChange(self):
         editorName = self.name
 
         match editorName:
@@ -70,7 +71,15 @@ class CodeEditor:
                 
                 
 
-
+            # case "OutputEditor":
+            #     escapedCode = self.escapeStr(str(self.editor.value))
+            #     flouriteAnalysis = await ui.run_javascript(
+            #             f"""
+            #             const flourite = window.flourite;
+            #             flourite(String.raw`{escapedCode}`);
+            #             """)
+            #     codeLanguage = flouriteAnalysis['language']
+            #     self.editor.language = codeLanguage
                 
                 
                 
