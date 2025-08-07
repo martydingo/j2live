@@ -44,32 +44,30 @@ class CodeEditor:
         except Exception as errorMsg:
             return str(errorMsg)
 
-
     async def handleChange(self):
         editorName = self.name
 
         match editorName:
             case "YAMLEditor":
                 jinjaTemplate = app.storage.browser["Jinja2"]["value"]
-                yamlVars = app.storage.browser["YAML"]["value"]   
+                yamlVars = app.storage.browser["YAML"]["value"]
                 yamlParseResult = self.testYamlParsing(yamlVars)
                 if yamlParseResult == True:
-                    renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
+                    renderResult = renderTemplate(
+                        yamlVars=yamlVars, jinjaTemplate=jinjaTemplate
+                    )
                     self.setOutput(renderResult["result"])
                 else:
                     self.setOutput(yamlParseResult)
 
-
             case "Jinja2Editor":
                 jinjaTemplate = app.storage.browser["Jinja2"]["value"]
-                yamlVars = app.storage.browser["YAML"]["value"]       
-                renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
-                
+                yamlVars = app.storage.browser["YAML"]["value"]
+                renderResult = renderTemplate(
+                    yamlVars=yamlVars, jinjaTemplate=jinjaTemplate
+                )
+
                 self.setOutput(str(renderResult["result"]))
-                
-                
-                
-                
 
             # case "OutputEditor":
             #     escapedCode = self.escapeStr(str(self.editor.value))
@@ -80,6 +78,3 @@ class CodeEditor:
             #             """)
             #     codeLanguage = flouriteAnalysis['language']
             #     self.editor.language = codeLanguage
-                
-                
-                

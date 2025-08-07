@@ -26,6 +26,19 @@ J2Live is a web-based application that allows users to edit and render Jinja2 te
     ```sh
     docker run -p 8000:8000 j2live
     ```
+The above will pull directly from this repository to build the image. If you want to build from your fork, it's almost the same:
+
+1. Build the Docker image:
+
+    ```sh
+    docker build -t j2live --build-arg BUILD_MODE=local .
+    ```
+
+2. Run the Docker container:
+
+    ```sh
+    docker run -p 8000:8000 j2live
+    ```
 
 ### Locally
 
