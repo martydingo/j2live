@@ -2,9 +2,13 @@ from nicegui import ui
 from enum import Enum
 import os
 
+
 class Theme:
     def __init__(self):
-        ui.add_head_html('<link rel="stylesheet" type="text/css" href="static/styles.css">')
+        ui.add_head_html(
+            '<link rel="stylesheet" type="text/css" href="static/styles.css">'
+        )
+
 
 class NordColors(Enum):
     nord0 = "#2e3440"

@@ -8,11 +8,11 @@ storageSecret = os.getenv("J2LIVE_STORAGE_SECRET")
 
 app = FastAPI()
 
-class J2Live():
+
+class J2Live:
     def __init__(self):
         UI()
 
     ui.run_with(
-        app=app,
-        storage_secret=storageSecret if storageSecret != None else "test123"
+        app=app, storage_secret=storageSecret if storageSecret != None else "test123"
     )

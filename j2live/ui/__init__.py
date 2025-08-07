@@ -43,12 +43,16 @@ class UI:
         try:
             app.storage.browser["YAML"]
         except KeyError as errorMsg:
-            app.storage.browser["YAML"] = {"value": "functions:\n  - init\n  - main\n  - new\n  - clr"}
+            app.storage.browser["YAML"] = {
+                "value": "functions:\n  - init\n  - main\n  - new\n  - clr"
+            }
 
         try:
             app.storage.browser["Jinja2"]
         except KeyError:
-            app.storage.browser["Jinja2"] = {"value": "class SomeClass(SomeBaseClassHere):\n  {% for name in functions %}\n  def __{{ name }}__(self, **kwargs):\n      super().__init__(**kwargs)\n  \n  {% endfor %}"}
+            app.storage.browser["Jinja2"] = {
+                "value": "class SomeClass(SomeBaseClassHere):\n  {% for name in functions %}\n  def __{{ name }}__(self, **kwargs):\n      super().__init__(**kwargs)\n  \n  {% endfor %}"
+            }
 
         try:
             app.storage.browser["Output"]

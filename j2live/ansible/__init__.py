@@ -7,7 +7,6 @@ from ansible.inventory.manager import InventoryManager
 from ansible.vars.manager import VariableManager
 from ansible.executor.task_queue_manager import TaskQueueManager
 from ansible.plugins.callback import CallbackBase
-from ansible.plugins.loader import init_plugin_loader
 import yaml, os
 
 
@@ -33,9 +32,10 @@ def renderTemplate(yamlVars, jinjaTemplate: str):
             self.host_failed[host.get_name()] = result
 
     def cleanTemplate(jinjaTemplate: str):
-        return jinjaTemplate.replace("lookup('pipe', 'kill 0')", "lookup('pipe', 'kill ')").replace('lookup("pipe", "kill 0")', 'lookup("pipe", "kill ")')
+        return jinjaTemplate.replace(
+            "lookup('pipe', 'kill 0')", "lookup('pipe', 'kill ')"
+        ).replace('lookup("pipe", "kill 0")', 'lookup("pipe", "kill ")')
 
-    init_plugin_loader()
     loader = DataLoader()
 
     context.CLIARGS = ImmutableDict(
@@ -77,7 +77,6 @@ def renderTemplate(yamlVars, jinjaTemplate: str):
     cleanJinjaTemplate = cleanTemplate(jinjaTemplate)
     with open("template.j2", "w") as file:
         file.write(rf"{cleanJinjaTemplate}")
-        file.close()
 
     play_source = dict(
         name="Ansible Play",
@@ -107,11 +106,16 @@ def renderTemplate(yamlVars, jinjaTemplate: str):
     tqm.run(play)
     os.remove("template.j2")
     if len(results_callback.host_failed) > 0:
-        output = results_callback.host_failed["localhost"]._result["msg"]
+        output = results_callback.host_failed["localhost"]._result.get(
+            "msg", "Unknown error"
+        )
         return {"result": output, "error": True}
+    elif len(results_callback.host_ok) > 0:
+        output = (
+            results_callback.host_ok["localhost"]
+            ._result.get("ansible_facts", {})
+            .get("output", "")
+        )
+        return {"result": output, "error": False}
     else:
-        if len(results_callback.host_ok) > 0:
-            output = results_callback.host_ok["localhost"]._result["ansible_facts"][
-                "output"
-            ]
-            return {"result": output, "error": False}
+        return {"result": "No output", "error": True}
