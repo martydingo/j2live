@@ -6,15 +6,15 @@ import yaml
 
 class CodeEditor:
     # escapeStr = lambda self, string: string.replace("${", '${"${"}').replace("`", '${"`"}')
-    def __init__(self, name: str, language: str, classes=None):
+    def __init__(self, name: str, language: str, tailwind=None):
         self.name = name
 
         editorContainer = ui.element("div")
-        editorContainer.classes("w-full h-full flex flex-col")
+        editorContainer.tailwind("w-full h-full flex flex-col")
         shortName = name.replace("Editor", "")
 
         with editorContainer:
-            ui.label(shortName).classes("muted").classes(
+            ui.label(shortName).classes("muted").tailwind(
                 "indent-4 font-bold text-xs tracking-wider font-display"
             )
             codeEditor = ui.codemirror(
@@ -31,8 +31,8 @@ class CodeEditor:
 
         self.editor = codeEditor
 
-        if classes != None:
-            codeEditor.classes(classes + " font-mono")
+        if tailwind != None:
+            codeEditor.tailwind(tailwind + " font-mono")
 
     def setOutput(self, value: str):
         app.storage.browser["Output"]["value"] = value

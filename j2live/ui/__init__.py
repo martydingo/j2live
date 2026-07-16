@@ -17,27 +17,27 @@ class UI:
         AppHeader()
 
         editorContainer = ui.element("div")
-        editorContainer.classes("flex w-full h-full justify-evenly items-start")
+        editorContainer.tailwind("flex w-full h-full justify-evenly items-start")
 
         with editorContainer:
             inputContainer = ui.element("div")
-            inputContainer.classes(
+            inputContainer.tailwind(
                 "flex flex-col justify-center items-center basis-5/12"
             )
 
             outputContainer = ui.element("div")
-            outputContainer.classes(
+            outputContainer.tailwind(
                 "flex flex-col justify-center items-center basis-5/12"
             )
 
             with inputContainer:
-                CodeEditor(name="YAMLEditor", language="yaml", classes="min-h-[32rem]")
-                ui.space().classes("h-12")
+                CodeEditor(name="YAMLEditor", language="yaml", tailwind="min-h-[32rem]")
+                ui.space().tailwind("h-12")
                 CodeEditor(
-                    name="Jinja2Editor", language="jinja2", classes="min-h-[32rem]"
+                    name="Jinja2Editor", language="jinja2", tailwind="min-h-[32rem]"
                 )
             with outputContainer:
-                CodeEditor(name="OutputEditor", language="", classes="min-h-[68rem]")
+                CodeEditor(name="OutputEditor", language="", tailwind="min-h-[68rem]")
 
     def setStorage(self):
         try:
