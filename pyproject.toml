@@ -28,3 +28,5 @@ name = "PythonHosted"
 url = "https://files.pythonhosted.org"
 priority = "primary"
 
+[tool.vercel]
+entrypoint = "j2live:app"
