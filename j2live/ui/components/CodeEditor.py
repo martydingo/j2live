@@ -6,15 +6,15 @@ import yaml
 
 class CodeEditor:
     # escapeStr = lambda self, string: string.replace("${", '${"${"}').replace("`", '${"`"}')
-    def __init__(self, name: str, language: str, tailwind=None):
+    def __init__(self, name: str, language: str, classes=None):
         self.name = name
 
         editorContainer = ui.element("div")
-        editorContainer.tailwind("w-full h-full flex flex-col")
+        editorContainer.classes("w-full h-full flex flex-col")
         shortName = name.replace("Editor", "")
 
         with editorContainer:
-            ui.label(shortName).classes("muted").tailwind(
+            ui.label(shortName).classes("muted").classes(
                 "indent-4 font-bold text-xs tracking-wider font-display"
             )
             codeEditor = ui.codemirror(
@@ -31,8 +31,8 @@ class CodeEditor:
 
         self.editor = codeEditor
 
-        if tailwind != None:
-            codeEditor.tailwind(tailwind + " font-mono")
+        if classes != None:
+            codeEditor.classes(classes + " font-mono")
 
     def setOutput(self, value: str):
         app.storage.browser["Output"]["value"] = value
@@ -44,32 +44,30 @@ class CodeEditor:
         except Exception as errorMsg:
             return str(errorMsg)
 
-
     async def handleChange(self):
         editorName = self.name
 
         match editorName:
             case "YAMLEditor":
                 jinjaTemplate = app.storage.browser["Jinja2"]["value"]
-                yamlVars = app.storage.browser["YAML"]["value"]   
+                yamlVars = app.storage.browser["YAML"]["value"]
                 yamlParseResult = self.testYamlParsing(yamlVars)
                 if yamlParseResult == True:
-                    renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
+                    renderResult = renderTemplate(
+                        yamlVars=yamlVars, jinjaTemplate=jinjaTemplate
+                    )
                     self.setOutput(renderResult["result"])
                 else:
                     self.setOutput(yamlParseResult)
 
-
             case "Jinja2Editor":
                 jinjaTemplate = app.storage.browser["Jinja2"]["value"]
-                yamlVars = app.storage.browser["YAML"]["value"]       
-                renderResult = renderTemplate(yamlVars=yamlVars, jinjaTemplate=jinjaTemplate)
-                
+                yamlVars = app.storage.browser["YAML"]["value"]
+                renderResult = renderTemplate(
+                    yamlVars=yamlVars, jinjaTemplate=jinjaTemplate
+                )
+
                 self.setOutput(str(renderResult["result"]))
-                
-                
-                
-                
 
             # case "OutputEditor":
             #     escapedCode = self.escapeStr(str(self.editor.value))
@@ -80,6 +78,3 @@ class CodeEditor:
             #             """)
             #     codeLanguage = flouriteAnalysis['language']
             #     self.editor.language = codeLanguage
-                
-                
-                
