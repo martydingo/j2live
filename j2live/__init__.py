@@ -5,6 +5,10 @@ os.environ.setdefault("ANSIBLE_HOME", "/tmp/.ansible")
 os.environ.setdefault("ANSIBLE_LOCAL_TEMP", "/tmp/.ansible/tmp")
 os.environ.setdefault("ANSIBLE_REMOTE_TEMP", "/tmp/.ansible/tmp")
 
+import nicegui.run as nicegui_run
+
+nicegui_run.setup = lambda: None
+
 from .ui import UI
 from nicegui import ui
 from fastapi import FastAPI
